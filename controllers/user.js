@@ -88,8 +88,8 @@ exports.postSignup = (req, res, next) => {
   if (req.body.password !== req.body.confirmPassword) validationErrors.push({ msg: 'Passwords do not match' });
 
   if (validationErrors.length) {
-    req.flash('errors', validationErrors);
-    return res.redirect('/signup');
+    // req.flash('errors', validationErrors);
+    return res.send(validationErrors[0].msg);
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
@@ -101,8 +101,8 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: req.body.email }, (err, existingUser) => {
     if (err) { return next(err); }
     if (existingUser) {
-      req.flash('errors', { msg: 'Account with that email address already exists.' });
-      return res.redirect('/signup');
+      // req.flash('errors', { msg: 'Account with that email address already exists.' });
+      return res.send('Account with that email address already exists, silly');
     }
     user.save((err) => {
       if (err) { return next(err); }
